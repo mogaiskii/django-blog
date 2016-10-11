@@ -1,8 +1,8 @@
-   .page-header {
-        background-color: #ff9400;
-        margin-top: 0;
-        padding: 20px 20px 20px 40px;
-    }
+.page-header {
+    background-color: #ff9400;
+    margin-top: 0;
+    padding: 20px 20px 20px 40px;
+}
 
     .page-header h1, .page-header h1 a, .page-header h1 a:visited, .page-header h1 a:active {
         color: #ffffff;
@@ -40,6 +40,7 @@
 
     .post {
         margin-bottom: 70px;
+        background-color: #FFEBCD;
     }
 
     .post h1 a, .post h1 a:visited {
