@@ -48,10 +48,10 @@
             <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil">/</span></a>
         {% endif %}
         <h1>{{ post.title }}</h1>
-        <p id="rate">{{ post.rate }}</p>
+        <p id="rate">rate:{{ post.rate }}</p>
         <button name="plus">+</button>
         <button name="minus">-</button>
-        <div>{{ post.visited }}</div>
+        <div>visited:{{ post.visited }}</div>
         {%if post.author %}
             {{ post.author }}
         {% endif %}

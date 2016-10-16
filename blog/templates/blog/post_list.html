@@ -4,7 +4,9 @@
     {% for post in posts.reverse %}
         <div class="post">
             <h1 class="title"><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
-            <div id="rate">{{ post.rate }}</div>
+            <div id="rate">rate:{{ post.rate }}</div>
+            <div>visited:{{ post.visited }}</div>
+            <br>
             <div class="date">published: {{ post.published_date }}</div>
             <p class="post">{{ post.text|truncatewords:"100" }}</p>
         </div>

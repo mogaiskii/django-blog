@@ -12,11 +12,16 @@
         <body>
             <div class="page-header">
             {% if user.is_authenticated %}
-                <a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus">+</span></a>
+                <div class = "row"><a href="{% url 'post_new' %}" class="top-menu"><span class="glyphicon glyphicon-plus">+</span></a></div>
             {% endif %}
-                <h1><a href="/">Django Blog</a></h1>
-                <a href="{% url 'best' %}">best</a>
-                <a href="{% url 'popular' %}">popular</a>
+                <div class="row">
+                <div class="col-md-6">
+                <h1><a href="/">Django Blog</a></h1></div>
+                <div class="col-md-3">
+                <a href="{% url 'best' %}">best</a></div>
+                <div class="col-md-3">
+                <a href="{% url 'popular' %}">popular</a></div>
+                </div>
             </div>
 
             <div class="content container">
@@ -33,3 +38,5 @@
             {% endblock %}
         </body>
     </html>
+
+    
