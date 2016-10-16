@@ -1,19 +1,62 @@
 {% extends 'blog/base.html' %}
 
+{% block javascript %}
+<script type="text/javascript">
+    $('button[name=plus]').click(function(){
+        var id = {{ post.pk }};
+        cUrl = '/post/plus/'+id
+        $.ajax({
+            url: cUrl,
+            dataType: 'json',
+            success: function(data){
+                if(data.rate){
+                    $('#rate').html(data.rate);
+                }
+            }
+        });
+    });
+    $('button[name=minus]').click(function(){
+        var id = {{ post.pk }};
+        cUrl = '/post/minus/'+id
+        $.ajax({
+            url: cUrl,
+            dataType: 'json',
+            success: function(data){
+                if(data.rate){
+                    $('#rate').html(data.rate);
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
+
 {% block content %}
     <div class="post">
         {% if post.published_date %}
             <div class="date">
-                {{ post.published_date }}
+                created:{{ post.published_date }}
+            </div>
+            <br>
+        {% endif %}
+        {% if post.last_edit_date %}
+            <div class="date">
+                edited:{{ post.last_edit_date }}
             </div>
         {% endif %}
         {% if user.is_authenticated %}
-            <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
+            <a class="btn btn-default" href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil">/</span></a>
         {% endif %}
         <h1>{{ post.title }}</h1>
+        <p id="rate">{{ post.rate }}</p>
+        <button name="plus">+</button>
+        <button name="minus">-</button>
+        <div>{{ post.visited }}</div>
         {%if post.author %}
             {{ post.author }}
         {% endif %}
+        <br><br>
         <p>{{ post.text|linebreaksbr }}</p>
+        <br>
     </div>
 {% endblock %}

@@ -3,6 +3,7 @@ from django.utils import timezone
 from .models import Post
 from .forms import PostForm
 from django.shortcuts import redirect
+from django.http import JsonResponse
 # Create your views here.
 def post_list(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('published_date')
@@ -10,6 +11,7 @@ def post_list(request):
 
 def post_detail(request,pk):
     post = get_object_or_404(Post, pk = pk)
+    post.visit()
     return render(request, 'blog/post_detail.html', {'post': post})
 
 def post_new(request):
@@ -32,9 +34,33 @@ def post_edit(request,pk):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
-            post.published_date = timezone.now()
+            post.last_edit_date = timezone.now()
             post.save()
             return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm(instance=post)
     return render(request, 'blog/post_edit.html', {'form': form})
+
+def plus(request,pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.plus()
+    data = {
+        "rate":str(post.rate),
+    }
+    return JsonResponse(data)
+
+def minus(request,pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.minus()
+    data = {
+        "rate":str(post.rate),
+    }
+    return JsonResponse(data)
+
+def best_posts(request):
+    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('rate')
+    return render(request, 'blog/post_list.html',{'posts': posts})
+
+def popular(request):
+    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('visited')
+    return render(request, 'blog/post_list.html',{'posts': posts})
