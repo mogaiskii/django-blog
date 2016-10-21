@@ -28,6 +28,16 @@
             }
         });
     });
+    $('button[name=send]').click(function(){
+        var text = $('textarea[name=text]').val();
+        if(text){
+            $('textarea[name=text]').val('');
+            alert(text);
+            $.ajax({
+                url: ''
+            });
+        }
+    });
 </script>
 {% endblock %}
 
@@ -35,11 +45,11 @@
     <div class="post">
         {% if post.published_date %}
             <div class="date">
-                created:{{ post.published_date }}
+                created:{{ post.created_date }}
             </div>
             <br>
         {% endif %}
-        {% if post.last_edit_date %}
+        {% if post.published_date %}
             <div class="date">
                 edited:{{ post.last_edit_date }}
             </div>
@@ -49,8 +59,10 @@
         {% endif %}
         <h1>{{ post.title }}</h1>
         <p id="rate">rate:{{ post.rate }}</p>
+        {% if user.is_authenticated %}
         <button name="plus">+</button>
         <button name="minus">-</button>
+        {% endif %}
         <div>visited:{{ post.visited }}</div>
         {%if post.author %}
             {{ post.author }}
@@ -59,4 +71,23 @@
         <p>{{ post.text|linebreaksbr }}</p>
         <br>
     </div>
+    <hr>
+{% if user.is_authenticated %}
+<!--add ajax-->
+    <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+    <form>
+        <textarea type="text" name="text"></textarea>
+        <button name="send" type="button">Send</button>
+    </form>
+
+{% endif %}
+    {% for comment in post.comments.all %}
+        <div class="comment">
+            <h3>{{ comment.author }}</h3>
+            <p>{{ comment.published_date }}</p>
+            <p>{{ comment.text|linebreaks  }}</p>
+            <br><br>
+        </div>
+    {% endfor %}
+
 {% endblock %}
