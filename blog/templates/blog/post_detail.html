@@ -1,44 +1,9 @@
 {% extends 'blog/base.html' %}
-
+{% load staticfiles %}
 {% block javascript %}
-<script type="text/javascript">
-    $('button[name=plus]').click(function(){
-        var id = {{ post.pk }};
-        cUrl = '/post/plus/'+id
-        $.ajax({
-            url: cUrl,
-            dataType: 'json',
-            success: function(data){
-                if(data.rate){
-                    $('#rate').html(data.rate);
-                }
-            }
-        });
-    });
-    $('button[name=minus]').click(function(){
-        var id = {{ post.pk }};
-        cUrl = '/post/minus/'+id
-        $.ajax({
-            url: cUrl,
-            dataType: 'json',
-            success: function(data){
-                if(data.rate){
-                    $('#rate').html(data.rate);
-                }
-            }
-        });
-    });
-    $('button[name=send]').click(function(){
-        var text = $('textarea[name=text]').val();
-        if(text){
-            $('textarea[name=text]').val('');
-            alert(text);
-            $.ajax({
-                url: ''
-            });
-        }
-    });
-</script>
+    <script async>
+        {% include "js/ajax.js" %}
+    </script>
 {% endblock %}
 
 {% block content %}
