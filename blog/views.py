@@ -99,10 +99,10 @@ def popular(request):
     return render(request, 'blog/post_list.html', {'posts': posts})
 
 
-def comment_create(request,pk):
+def comment_create(request, pk):
     text = request.POST.get('text', None)
-    print(text)
+    print(request.body,"\n\n")
     data = {
-        'is_recived': text
+        'is_recived': True,
     }
-    return JsonResponse(data)
+    return JsonResponse(dict(data))

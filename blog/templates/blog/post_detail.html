@@ -33,7 +33,6 @@
     $('button[name=send]').click(function(){
 
         var text = $('textarea[name=text]').val();
-        console.log(text)
         var id = {{ post.pk }};
         var cUrl = '/post/'+id+'/comment/';
         if(text){
@@ -41,12 +40,11 @@
             type: "POST",
             url: cUrl,
             dataType: "json",
-            data: {
-                'text' : text
-            },
+            data: JSON.stringify(text),
             success: function (data) {
           if (data.is_recived) {
-            alert("УСПЕХ, ЕПТА");
+            $('textarea[name=text]').val('');
+            console.log(data.is_recived);
           }},
             contentType: "application/json",
             crossDomain: false,
