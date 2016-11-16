@@ -1,0 +1,45 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    {% for post in posts %}
+        <div class="post">
+            <h1 class="title"><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
+            <div id="rate">rate:{{ post.rate }}</div>
+            <div>visited:{{ post.visited }}</div>
+            <div>Comments: {{ post.comments.count }}</div>
+            <br>
+            <div class="date">published: {{ post.published_date }}</div><br>
+            <div class="date">created: {{ post.created_date }}</div>
+            <p class="post">{{ post.text|truncatewords:"100"|linebreaksbr }}</p>
+        </div>
+    {% endfor %}
+    <div class="paginator">
+        {% if paginator.num_pages > 1 %}
+            <div class="button">
+                {% if page_obj.has_previous %}
+                    <a href="{% url 'post_page_list' page_obj.previous_page_number %}"><< Туды</a>
+                {% endif %}
+            </div>
+
+            <div class="button">
+                {% if page_obj.has_next %}
+                    <a href="{% url 'post_page_list' page_obj.next_page_number %}">Сюды >></a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <div id="pages">
+            {% for pn in paginator.page_range %}
+                {% if not forloop.first %}
+                    |
+                {% endif %}
+                {% if pn == page_obj.number %}
+                    <b>{{ pn }}</b>
+
+                {% else %}
+                    <a href="{% url 'post_page_list' pn=pn %}">{{ pn }}</a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}
