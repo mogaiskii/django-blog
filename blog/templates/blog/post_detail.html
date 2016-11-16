@@ -28,18 +28,27 @@
             }
         });
     });
+
+
     $('button[name=send]').click(function(){
-        var data = $('textarea[name=text]').val();
+
+        var text = $('textarea[name=text]').val();
+        console.log(text)
         var id = {{ post.pk }};
         var cUrl = '/post/'+id+'/comment/';
-        if(data){
+        if(text){
             $.ajax({
             type: "POST",
             url: cUrl,
-            data: JSON.stringify(data),
-            success: commentRender(data),
-            contentType: "application/json",
             dataType: "json",
+            data: {
+                'text' : text
+            },
+            success: function (data) {
+          if (data.is_recived) {
+            alert("УСПЕХ, ЕПТА");
+          }},
+            contentType: "application/json",
             crossDomain: false,
             beforeSend: function (xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -51,7 +60,7 @@
     });
     function commentRender(data){
     $('textarea[name=text]').val('');
-    console.log(data);};
+    console.log(data.is_recived);};
 
     function getCookie(name) {
     var cookieValue = null;
@@ -110,7 +119,7 @@
     <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
 
     <form>
-{% csrf_token %}
+    {% csrf_token %}
         <textarea type="text" name="text"></textarea>
         <button name="send" type="button">Send</button>
     </form>

@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
+from django.http import JsonResponse
 from .models import Post, Comment
 from .forms import PostForm, CommentForm
 from django.http import JsonResponse
@@ -7,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import ListView
 from django.views.generic.base import ContextMixin
+from django.views.generic.edit import CreateView
 # Create your views here.
 
 
@@ -68,20 +70,6 @@ def post_edit(request, pk):
 
 
 @login_required
-def add_comment_to_post(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    if request.is_ajax():
-        comment = Comment.objects.create()
-        comment.author = request.user
-        comment.post = post
-        comment.text = request
-    data = {
-        "met": request.method
-    }
-    return JsonResponse(data)
-
-
-@login_required
 def plus(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.plus()
@@ -109,3 +97,12 @@ def best_posts(request):
 def popular(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('visited')
     return render(request, 'blog/post_list.html', {'posts': posts})
+
+
+def comment_create(request,pk):
+    text = request.POST.get('text', None)
+    print(text)
+    data = {
+        'is_recived': text
+    }
+    return JsonResponse(data)
