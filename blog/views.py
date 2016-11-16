@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.http import JsonResponse
@@ -102,13 +103,14 @@ def popular(request):
 
 @login_required
 def comment_create(request, pk):
-    print("id:",request.user.id)
+    print("id:", request.user.id)
+    print("text: {}".format( (request.body).decode('utf-8') ))
     form = CommentForm()
-    form.text = request.POST.get('text', None)
-    form.post = Post.objects.get(pk=pk)
-    form.author_id = request.user.id
-    form.author = User.objects.get(id = request.user.id)
-    form.save()
+    comment = form.save(commit=False)
+    comment.text = json.loads( request.body.decode("utf-8") )
+    comment.post = Post.objects.get(pk=pk)
+    comment.author = request.user
+    comment.publish()
     # if form.is_valid():
     #     form.save()
     # else:
