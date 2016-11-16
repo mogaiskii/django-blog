@@ -8,9 +8,11 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import ListView
 from django.views.generic.base import ContextMixin
+from django.contrib.auth.models import User
 from django.views.generic.edit import CreateView
 # Create your views here.
-
+# TODO: write a todo
+# TODO: make here PEP
 
 class SideBarMixin(ContextMixin):
 
@@ -98,10 +100,19 @@ def popular(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('visited')
     return render(request, 'blog/post_list.html', {'posts': posts})
 
-
+@login_required
 def comment_create(request, pk):
-    text = request.POST.get('text', None)
-    print(request.body,"\n\n")
+    print("id:",request.user.id)
+    form = CommentForm()
+    form.text = request.POST.get('text', None)
+    form.post = Post.objects.get(pk=pk)
+    form.author_id = request.user.id
+    form.author = User.objects.get(id = request.user.id)
+    form.save()
+    # if form.is_valid():
+    #     form.save()
+    # else:
+    #     return JsonResponse(form.errors ,status=400)
     data = {
         'is_recived': True,
     }
