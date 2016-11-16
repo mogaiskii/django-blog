@@ -111,6 +111,7 @@ def comment_create(request, pk):
     comment.post = Post.objects.get(pk=pk)
     comment.author = request.user
     comment.publish()
+    #comment.publish()
     # if form.is_valid():
     #     form.save()
     # else:

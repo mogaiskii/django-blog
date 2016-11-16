@@ -46,4 +46,4 @@ class Comment(models.Model):
         self.save()
 
     class Meta:
-        ordering = ["-created_date"]
+        ordering = ["-published_date"]

@@ -41,10 +41,10 @@
             url: cUrl,
             dataType: "json",
             data: JSON.stringify(text),
-            success: function (data) {
+            success: function (data,text) {
           if (data.is_recived) {
-            $('textarea[name=text]').val('');
             console.log(data.is_recived);
+            commentRender();
           }},
             contentType: "application/json",
             crossDomain: false,
@@ -56,9 +56,16 @@
         });
         }
     });
-    function commentRender(data){
+    function commentRender(data,text){
+    var text = $('textarea[name=text]').val();
     $('textarea[name=text]').val('');
-    console.log(data.is_recived);};
+    var block = "<div class='comment'><h3>{{ user.username }}</h3><p>recently</p><p>" +text+ "</p><br><br></div>";
+
+    $(".coms").prepend(block);
+
+
+
+    };
 
     function getCookie(name) {
     var cookieValue = null;
@@ -114,14 +121,14 @@
     <hr>
 {% if user.is_authenticated %}
 <!--add ajax-->
-    <a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>
+    <!--<a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>-->
 
     <form>
     {% csrf_token %}
         <textarea type="text" name="text"></textarea>
         <button name="send" type="button">Send</button>
     </form>
-
+<div class="coms">
 {% endif %}
     {% for comment in post.comments.all %}
         <div class="comment">
@@ -131,5 +138,5 @@
             <br><br>
         </div>
     {% endfor %}
-
+</div>
 {% endblock %}
