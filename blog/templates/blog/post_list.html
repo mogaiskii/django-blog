@@ -14,21 +14,25 @@
         </div>
     {% endfor %}
     <div class="paginator">
+
         {% if paginator.num_pages > 1 %}
-            <div class="button">
+        <div class="row">
+            <div class="button col-md-2">
                 {% if page_obj.has_previous %}
                     <a href="{% url 'post_page_list' page_obj.previous_page_number %}"><< Туды</a>
                 {% endif %}
             </div>
 
-            <div class="button">
+            <div class="button col-md-2">
                 {% if page_obj.has_next %}
                     <a href="{% url 'post_page_list' page_obj.next_page_number %}">Сюды >></a>
                 {% endif %}
             </div>
+        </div>
         {% endif %}
 
-        <div id="pages">
+        <div id="pages" class="row">
+            <div class="col-md-1"></div>
             {% for pn in paginator.page_range %}
                 {% if not forloop.first %}
                     |

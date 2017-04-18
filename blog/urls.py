@@ -14,4 +14,7 @@ urlpatterns = [
     url(r'^post/plus/(?P<pk>[0-9]+)/$', views.plus, name='plus'),
     url(r'^post/minus/(?P<pk>[0-9]+)/$', views.minus, name='minus'),
     url(r'^post/(?P<pk>\d+)/comment/$', views.comment_create, name='add_comment_to_post'),
+
+    url(r'^accounts/register/$', views.RegisterFormView.as_view(), name="registration"),
+
 ]

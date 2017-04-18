@@ -8,12 +8,16 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import ListView
+from django.views.generic.edit import FormView
 from django.views.generic.base import ContextMixin
 from django.contrib.auth.models import User
+
+from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 # Create your views here.
 # TODO: write a todo
 # TODO: make here PEP
+
 
 class SideBarMixin(ContextMixin):
 
@@ -64,7 +68,7 @@ def post_edit(request, pk):
         if form.is_valid():
             post = form.save(commit=False)
             post.author = request.user
-            post.last_edit_date = timezone.now()
+            post.published_date = timezone.now()
             post.save()
             return redirect('post_detail', pk=post.pk)
     else:
@@ -93,12 +97,12 @@ def minus(request,pk):
 
 
 def best_posts(request):
-    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('rate')
+    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-rate')
     return render(request, 'blog/post_list.html', {'posts': posts})
 
 
 def popular(request):
-    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('visited')
+    posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-visited')
     return render(request, 'blog/post_list.html', {'posts': posts})
 
 @login_required
@@ -111,7 +115,6 @@ def comment_create(request, pk):
     comment.post = Post.objects.get(pk=pk)
     comment.author = request.user
     comment.publish()
-    #comment.publish()
     # if form.is_valid():
     #     form.save()
     # else:
@@ -120,3 +123,21 @@ def comment_create(request, pk):
         'is_recived': True,
     }
     return JsonResponse(dict(data))
+
+
+class RegisterFormView(FormView):
+    form_class = UserCreationForm
+
+    # Ссылка, на которую будет перенаправляться пользователь в случае успешной регистрации.
+    # В данном случае указана ссылка на страницу входа для зарегистрированных пользователей.
+    success_url = "accounts/login/"
+
+    # Шаблон, который будет использоваться при отображении представления.
+    template_name = "registration/login.html"
+
+    def form_valid(self, form):
+        # Создаём пользователя, если данные в форму были введены корректно.
+        form.save()
+
+        # Вызываем метод базового класса
+        return super(RegisterFormView, self).form_valid(form)

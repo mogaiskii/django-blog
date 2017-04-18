@@ -98,7 +98,12 @@
         {% endif %}
         {% if post.published_date %}
             <div class="date">
-                edited:{{ post.last_edit_date }}
+                edited:{{ post.published_date }}
+            </div>
+        {% endif %}
+        {% if post.blog %}
+            <div>
+                blog: {{ post.blog }}
             </div>
         {% endif %}
         {% if user.is_authenticated %}
