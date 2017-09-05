@@ -3,56 +3,64 @@
         <head>
             <title>Django blog</title>
             <link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}"/>
-            <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+            
+
             <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
             <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
             <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+            <link rel="stylesheet" href="{% static 'css/blog1.css' %}"> 
+
             <script src="https://code.jquery.com/jquery-3.1.0.min.js" ></script>
             <script src="http://malsup.github.io/min/jquery.form.min.js" ></script>
         </head>
         <body>
-            <div class="page-header">
 
+            <div class="container-fluid page-header">
+                <h1><a href="/">DarkHead Blog</a></h1>
+            </div>
 
-                <div class="row">
-                    <div class="col-md-3">
-                        <h1><a href="/">Django Blog</a></h1></div>
-                    <div class="col-md-2">
-                        <a href="{% url 'best' %}">best</a></div>
-                    <div class="col-md-2">
-                        <a href="{% url 'popular' %}">popular</a></div>
-                    {% if user.is_authenticated %}
-                        <div class="col-md-2"><a href="{% url 'post_new' %}" class="top-menu">+</a></div>
-                    {% endif %}
-                </div>
+            <nav class="navbar navbar-default top-menu">
+                <div class="container">
 
-                    <div class="row">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{% url 'best' %}">Best</a></li>
+                        <li><a href="{% url 'popular' %}">Popular</a></li>
                         {% if user.is_authenticated %}
-                        <div class="col-md-2"><a href="{% url 'logout'  %}?next=/">logout</a></div>
+                        <li><a href="{% url 'post_new' %}">+POST</a></li>
+                        {% endif %}
+                    </ul>
+                    
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url 'logout'  %}?next=/">logout</a></li>
                             {% if user.is_staff %}
-                            <a href="/admin">admin</a>
-                            <!--TODO: исправить это!!!!!!(NoReverseMatch w/ 'admin')-->
+                        <li><a href="/admin">admin</a></li>
                             {% endif %}
                         {% else %}
-                        <div class="col-md-2"><a href="{% url 'login' %}?next=/">login</a></div>
-
-                        <div class="col-md-2"><a href="{% url 'registration' %}?next=/">registration</a></div>
+                        <li><a href="{% url 'login' %}?next=/">login</a></li>
+                        <li><a href="{% url 'registration' %}?next=/">registration</a></li>
                         {% endif %}
-                    </div>
-            </div>
+                    </ul>
+
+                </div>
+            </nav>
 
             <div class="content container">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-9 post">
                         {% block content %}
                         {% endblock %}
                     </div>
-                    {% block side %}
-                    {% endblock %}
+                    <div class="hidden-xs hidden-sm">
+                        {% block side %}
+                        {% endblock %}
+                    </div>
                 </div>
             </div>
-            <div class="page-header">
-                ДЕСИГН
+
+            <div class="footer container-fluid navbar-fixed-bottom">
+                Александр Можайский &copy;2017
             </div>
             {% block javascript %}
             {% endblock %}

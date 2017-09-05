@@ -2,34 +2,39 @@
 
 {% block content %}
     {% for post in posts %}
-        <div class="post">
+        <div class="post post_wrapper">
             <h1 class="title"><a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h1>
-            <div id="rate">rate:{{ post.rate }}</div>
-            <div>visited:{{ post.visited }}</div>
-            <div>Comments: {{ post.comments.count }}</div>
-            <br>
-            <div class="date">published: {{ post.published_date }}</div><br>
-            <div class="date">created: {{ post.created_date }}</div>
+            
+
+            <p class="post-info">
+                <span class="author label label-info">{{ post.author }}</span>
+                <span class="date">{{ post.published_date|date:" j. n. Y" }}</span>
+                <span class="rate"> <i class="glyphicon glyphicon-star"></i>:{{ post.rate }} </span>
+                <span class="comments"> <i class="glyphicon glyphicon-envelope"></i>:{{ post.comments.count }} </span>
+            </p>
             <p class="post">{{ post.text|truncatewords:"100"|linebreaksbr }}</p>
         </div>
+        <br>
     {% endfor %}
+
+
     <div class="paginator">
 
         {% if paginator.num_pages > 1 %}
         <div class="row">
             <div class="button col-md-2">
                 {% if page_obj.has_previous %}
-                    <a href="{% url 'post_page_list' page_obj.previous_page_number %}"><< Туды</a>
+                    <a href="{% url 'post_page_list' page_obj.previous_page_number %}"> << </a>
                 {% endif %}
             </div>
 
             <div class="button col-md-2">
                 {% if page_obj.has_next %}
-                    <a href="{% url 'post_page_list' page_obj.next_page_number %}">Сюды >></a>
+                    <a href="{% url 'post_page_list' page_obj.next_page_number %}"> >> </a>
                 {% endif %}
             </div>
         </div>
-        {% endif %}
+        
 
         <div id="pages" class="row">
             <div class="col-md-1"></div>
@@ -45,5 +50,8 @@
                 {% endif %}
             {% endfor %}
         </div>
+        {% endif %}
+
+
     </div>
 {% endblock content %}
