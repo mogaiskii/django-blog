@@ -32,8 +32,8 @@ class PostList(ListView):
     ordering = "-created_date"
     context_object_name = "posts"
     template_name = "blog/post_list.html"
-    paginate_by = 2
-    paginate_orphans = 1
+    paginate_by = 7
+    paginate_orphans = 3
     allow_empty = True
     page_kwarg = "pn"
 
