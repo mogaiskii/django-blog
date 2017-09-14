@@ -30,3 +30,91 @@
 			</div>
         </form>
     {% endblock %}
+
+    {% block javascript %}
+<script type="text/javascript">
+
+		var target = 'id_text';
+	
+		var main = function(){
+			try{
+				var redactor = document.getElementById(target);
+				redactor.hidden = true;
+				redactor.style.display = 'none';
+				var widget = document.createElement('div');
+				widget.innerHTML = `
+				<div id="wysiwyg__panel" class="btn-group">
+					<button type="button" class="btn btn-default" onclick="bold()"><b>b</b></button>
+					<button type="button" class="btn btn-default" onclick="italic()"><i>i</i></button>
+					<button type="button" class="btn btn-default" onclick="underline()"><u>u</u></button>
+					<button type="button" class="btn btn-default" onclick="heading(1)">h1</button>
+					<button type="button" class="btn btn-default" onclick="heading(2)">h2</button>
+					<button type="button" class="btn btn-default" onclick="heading(3)">h3</button>
+					<button type="button" class="btn btn-default" onclick="heading(4)">h4</button>
+				</div>
+				<div id="wysiwyg__redactor"  class="form-control" contenteditable></div>
+				`;
+				widget.id = "wysiwyg";
+				redactor.after(widget);
+				document.getElementById('wysiwyg__redactor').innerHTML = redactor.value;
+				widget.onkeyup = function(){
+					valsave();
+				}
+			}
+			catch(err){
+				console.log(err);
+			}
+		}
+	
+
+		var bold = function() {
+			document.execCommand( 'bold', false, null );
+			valsave();
+		};
+
+		var heading = function(headlevel){
+			var head = '<h'+headlevel+'>';
+			document.execCommand('formatBlock',false,head);
+			valsave();
+		};
+		var unheading = function(){
+			document.execCommand('removeFormat',false,null);
+			valsave();
+		}
+
+		var italic = function(){
+			document.execCommand( 'italic',false,null );
+			valsave();
+		};
+		var paragraph = function(){
+			document.execCommand('heading',false,'p');
+			valsave();
+		};
+		var underline = function(){
+			document.execCommand('underline', false, null);
+			valsave();
+		};
+		var link = function(href){
+			document.execCommand('createLink',false,href);
+			valsave();
+		};
+		var redo = function(){
+			document.execCommand('redo',false,null);
+			valsave();
+		};
+		var undo = function(){
+			document.execCommand('undo',false,null);
+			valsave();
+		};
+		var valsave = function(){
+			var redactor = document.getElementById('wysiwyg__redactor');
+			var value = redactor.innerHTML;
+			var field = document.getElementById(target);
+			field.value = value;
+		};
+
+		window.onload = main;
+
+
+</script>
+{% endblock %}

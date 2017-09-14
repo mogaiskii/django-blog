@@ -84,3 +84,19 @@ blockquote>footer::before{
 .blog-header>.jumbotron h1{
 	font-family: 'Lobster', cursive;
 }
+
+#wysiwyg__redactor{
+	border: 1px solid black;
+	padding: 5px;
+	background: white;
+	border-radius: 5px;
+	min-height: 300px;
+	position: relative;
+	overflow-y: scroll;
+}
+#wysiwyg__popup{
+	border: 1px solid black;
+	width: 100px;
+	height: 30px;
+	position: relative;
+}
