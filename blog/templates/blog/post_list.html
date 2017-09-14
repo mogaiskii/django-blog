@@ -54,4 +54,20 @@
 
 
     </div>
-{% endblock content %}
+{% endblock %}
+
+
+{% block sidebar %}
+    
+    
+    <div class="list-group">
+    {% for blog in blogs %}
+        <a href="blog/{{ blog.pk }}" class="list-group-item">
+            <h4 class="list-group-item-heading">{{ blog.name }}</h4>
+            <p class="list-group-item-text">{{ blog.description|truncatewords:"20" }}</p>
+        </a>
+    {% endfor %}
+    </div>
+
+
+{% endblock %}

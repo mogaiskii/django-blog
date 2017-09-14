@@ -13,6 +13,17 @@ a,a:link, a:hover{
 	text-decoration: none;
 }
 
+.sidebar{
+	padding-top: 30px;
+	padding-left: 10px;
+}
+.list-group-item{
+	background: #f5f5f5;
+}
+a.list-group-item:hover , a.list-group-item:focus{
+	background: #FFC38D;
+}
+
 
 .page-header{
 	background: #FFbb33;

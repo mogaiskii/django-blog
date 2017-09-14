@@ -9,15 +9,13 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.views.generic import ListView
 from django.views.generic.edit import FormView
-from django.views.generic.base import ContextMixin
+from django.views.generic.base import TemplateResponseMixin
 from django.contrib.auth.models import User
 
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic.edit import CreateView
 
 # TODO: make here PEP
-# TODO: CBV only?
-
 
 # /
 # /page/:pn
@@ -30,6 +28,11 @@ class PostList(ListView):
     paginate_orphans = 3
     allow_empty = True
     page_kwarg = "pn"
+
+    def get_context_data(self, **kwargs):
+        context = super(PostList, self).get_context_data(**kwargs)
+        context['blogs'] = Blog.objects.all()
+        return context
 
 
 # /post/:pk
