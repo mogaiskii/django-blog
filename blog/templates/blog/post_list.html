@@ -12,7 +12,7 @@
                 <span class="rate"> <i class="glyphicon glyphicon-star"></i>:{{ post.rate }} </span>
                 <span class="comments"> <i class="glyphicon glyphicon-envelope"></i>:{{ post.comments.count }} </span>
             </p>
-            <p class="post">{{ post.text|truncatewords:"100"|linebreaksbr }}</p>
+            <p class="post_data_wrapper">{{ post.text|safe|truncatewords:"100"|linebreaksbr }}</p>
         </div>
         <br>
     {% endfor %}

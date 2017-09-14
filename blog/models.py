@@ -38,17 +38,10 @@ class Post(models.Model):
 
 class Blog(models.Model):
     name = models.CharField(max_length=200)
-    moderators = models.ManyToManyField(User, through='Moderator', through_fields=('blog', 'user'))
+    description = models.TextField()
 
     def __str__(self):
         return self.name
-
-
-class Moderator(models.Model):
-    blog = models.ForeignKey(Blog)
-    user = models.ForeignKey(User)
-    big_boss = models.ForeignKey(User, related_name="moderator_boss")
-    invite_message = models.CharField(max_length=64)
 
 
 class Comment(models.Model):
@@ -63,4 +56,4 @@ class Comment(models.Model):
         self.save()
 
     class Meta:
-        ordering = ["-published_date"]
+        ordering = ["-published_date"]  # TODO: Think about it! (mb not '-')

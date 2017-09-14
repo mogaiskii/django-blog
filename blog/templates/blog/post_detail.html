@@ -124,7 +124,7 @@
         {% endif %}
 
         <br><br>
-        <p>{{ post.text|linebreaksbr }}</p>
+        <p class="post_data_wrapper">{{ post.text|safe|linebreaksbr }}</p>
         <br>
     </div>
 
