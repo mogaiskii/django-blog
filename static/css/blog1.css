@@ -59,17 +59,3 @@ blockquote{
 blockquote>footer::before{
 	content: '';
 }
-
-.blog-header>.jumbotron{
-	border-radius: 0;
-	color: ;
-	background: none;
-	border-bottom: 2px solid #5f1f1f;
-	border-left: 4px solid #5f1f1f;
-	padding-bottom: 0;
-	padding-top: 0;
-	margin-top: 60px;
-}
-.blog-header>.jumbotron h1{
-	font-family: 'Lobster', cursive;
-}

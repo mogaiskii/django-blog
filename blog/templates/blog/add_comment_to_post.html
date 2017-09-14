@@ -2,8 +2,16 @@
 
 {% block content %}
     <h1>New comment</h1>
-    <form method="POST" class="post-form">{% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="save btn btn-default">Send</button>
-    </form>
+<form method="POST" class="post-form form-inline">{% csrf_token %}
+{{ form.non_field_errors }}
+
+    <div class="fieldWrapper form-group">
+		{{ form.text.errors }}
+		<label for="{{ form.text.id_for_label }}" class="col-sm-3">{{ form.text.label_tag }}</label>
+		<div class="col-sm-4">
+			{{ form.text }}
+		</div>
+	</div>
+	<button type="submit" class="btn btn-default">Send</button>
+</form>
 {% endblock %}

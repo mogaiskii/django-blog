@@ -5,33 +5,34 @@
 <script type="text/javascript" >
     $('button[name=plus]').click(function(){
         var id = {{ post.pk }};
-        var cUrl = '/post/plus/'+id
+        var cUrl = '/post/rate/'+id+'/plus';
         $.ajax({
             url: cUrl,
             dataType: 'json',
             success: function(data){
                 if(data.rate){
-                    $('#rate').html("rate:"+data.rate);
+                    $('#rate').html(data.rate);
                 }
             }
         });
     });
     $('button[name=minus]').click(function(){
         var id = {{ post.pk }};
-        var cUrl = '/post/minus/'+id;
+        var cUrl = '/post/rate/'+id+'/minus';
         $.ajax({
             url: cUrl,
             dataType: 'json',
             success: function(data){
                 if(data.rate){
-                    $('#rate').html("rate:"+data.rate);
+                    $('#rate').html(data.rate);
                 }
             }
         });
     });
 
 
-    $('button[name=send]').click(function(){
+    $('#send').click(function(){
+        console.log("sending");
 
         var text = $('textarea[name=text]').val();
         var id = {{ post.pk }};
@@ -60,9 +61,9 @@
     function commentRender(data,text){
     var text = $('textarea[name=text]').val();
     $('textarea[name=text]').val('');
-    var block = "<div class='comment'><h3>{{ user.username }}</h3><p>recently</p><p>" +text+ "</p><br><br></div>";
+    var block = "<div class='comment'><blockquote>"+ text +"<footer><span class='label label-success'>{{ user.username }}</span> Recently</footer></blockquote></div>";
 
-    $(".coms").prepend(block);
+    $(".coms").append(block);
 
 
 
@@ -95,18 +96,23 @@
     <div class="post">
         
 
-        {% if post.blog %}
-            <div>
-                blog: {{ post.blog }}
-            </div>
-        {% endif %}
 
 
         <h1>{{ post.title }}</h1>
 
         <p class="post-info">
             <span class="author label label-info">{{ post.author }}</span>
-            <span class="date">{{ post.published_date|date:" j. n. Y" }}</span>
+            
+            {% if post.blog %}
+            @
+            <a href="/blog/{{ post.blog.pk }}">
+            <span class="blog label label-warning">
+                {{ post.blog }}
+            </span>
+            </a>
+
+        {% endif %}
+            <span class="date"> {{ post.published_date|date:" j. n. Y" }}</span>
             {% if user.is_authenticated and user.is_staff or user.username == post.author.username %}
                 <a href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
             {% endif %}
@@ -114,11 +120,18 @@
 
         
         {% if user.is_authenticated %}
-        <p>
-            <button name="minus">-</button>
-            <span id="rate">{{ post.rate }}</span>
-            <button name="plus">+</button>
-        </p>
+
+        <div class="input-group col-md-1">
+              <div class="input-group-btn">
+              <button class="btn btn-default" name="minus">-</button>
+                <!-- Button and dropdown menu -->
+              </div>
+              <span id="rate" type="text" class="form-control">{{ post.rate }}</span>
+              <div class="input-group-btn">
+                <!-- Button and dropdown menu -->
+                <button class="btn btn-default"  name="plus">+</button>
+              </div>
+        </div>
         {% else %}
         <p><span id="rate">{{ post.rate }}</span></p>
         {% endif %}
@@ -128,25 +141,31 @@
         <br>
     </div>
 
-    <hr>
-{% if user.is_authenticated %}
-<!--add ajax-->
-    <!--<a class="btn btn-default" href="{% url 'add_comment_to_post' pk=post.pk %}">Add comment</a>-->
+<h3>Comments:</h3>
 
-    <form>
-    {% csrf_token %}
-        <textarea type="text" name="text"></textarea>
-        <button name="send" type="button">Send</button>
-    </form>
+
 <div class="coms">
-{% endif %}
     {% for comment in post.comments.all %}
         <div class="comment">
-            <h3>{{ comment.author }}</h3>
-            <p>{{ comment.published_date }}</p>
-            <p>{{ comment.text|linebreaks  }}</p>
-            <br><br>
+            <blockquote>
+                <footer><span class="label label-success">{{ comment.author }}</span>
+            {{ comment.published_date|date:" j. n. Y"  }}</footer>
+                {{ comment.text|linebreaks  }}
+            </blockquote>
         </div>
     {% endfor %}
 </div>
+
+
+{% if user.is_authenticated %}
+    <form class="post-form form-inline">{% csrf_token %}
+
+        <label for="{{ form.text.id_for_label }}" class="col-sm-2">New comment:</label>
+        <div class="fieldWrapper form-group">
+                <textarea type="text" name="text" class="form-control"></textarea>
+        </div>
+        <input id="send" type="button" class="btn btn-default" value="Send" >
+    </form>
+{% endif %}
+
 {% endblock %}

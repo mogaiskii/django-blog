@@ -56,4 +56,4 @@ class Comment(models.Model):
         self.save()
 
     class Meta:
-        ordering = ["-published_date"]  # TODO: Think about it! (mb not '-')
+        ordering = ["published_date"]  # TODO: Think about it! (mb not '-')
