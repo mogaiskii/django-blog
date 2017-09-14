@@ -37,7 +37,7 @@ class PostList(ListView):
 def post_detail(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.visit()
-    return render(request, 'blog/post_detail.html', {'post': post})
+    return render(request, 'blog/post_detail.html', {'post': post, 'page':'|'+post.title})
 
 
 # /post/new  #(pk=None => new Post)
@@ -58,7 +58,7 @@ def post_edit(request, pk=None):
             return redirect('post_detail', pk=post.pk)
     else: # GET:
         form = PostForm(instance=post)
-    return render(request, 'blog/post_edit.html', {'form': form})
+    return render(request, 'blog/post_edit.html', {'form': form,'page':'|New post'})
 
 
 
@@ -80,13 +80,13 @@ def rate(request,pk,change):
 # /post/best
 def best_posts(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-rate')
-    return render(request, 'blog/post_list.html', {'posts': posts})
+    return render(request, 'blog/post_list.html', {'posts': posts,'page':'|Best'})
 
 
 # /post/popular
 def popular(request):
     posts = Post.objects.filter(published_date__lte=timezone.now()).order_by('-visited')
-    return render(request, 'blog/post_list.html', {'posts': posts})
+    return render(request, 'blog/post_list.html', {'posts': posts,'page':'|Popular'})
 
 
 # /post/:pk/comment
@@ -110,6 +110,7 @@ def blog_detail(request,pk):
     data = {}
     data['blog'] = blog
     data['posts'] = Post.objects.filter(blog=blog).order_by('-created_date')
+    data['page'] = '|'+blog.name
     return render(request, 'blog/blog_posts.html', data)
 
 
