@@ -70,12 +70,16 @@ def post_edit(request, pk=None):
 @login_required
 def rate(request,pk,change):
     post = get_object_or_404(Post, pk=pk)
+    rate_state = 0 # -1 ->dislike  0 ->nothing  1 ->like
     if change == 'plus':
-        post.plus()
+        if request.user.profile.like(post):
+            rate_state = 1
     elif change == 'minus':
-        post.minus()
+        if request.user.profile.dislike(post):
+            rate_state = -1
     data = {
         "rate": str(post.rate),
+        "rate_state": str(rate_state)
     }
     return JsonResponse(data)
 
@@ -123,7 +127,7 @@ class RegisterFormView(FormView):
 
     # Ссылка, на которую будет перенаправляться пользователь в случае успешной регистрации.
     # В данном случае указана ссылка на страницу входа для зарегистрированных пользователей.
-    success_url = "accounts/login/"
+    success_url = "/accounts/login"
 
     # Шаблон, который будет использоваться при отображении представления.
     template_name = "registration/login.html"

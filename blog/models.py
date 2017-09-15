@@ -18,11 +18,15 @@ class Post(models.Model):
         if self.rate < 99999:
             self.rate += 1
             self.save()
+            self.author.profile.score +=1
+            self.author.save()
 
     def minus(self):
         if self.rate > 0:
             self.rate -= 1
             self.save()
+            self.author.profile.score -=1
+            self.author.save()
 
     def visit(self):
         self.visited += 1
@@ -57,3 +61,48 @@ class Comment(models.Model):
 
     class Meta:
         ordering = ["published_date"]  # TODO: Think about it! (mb not '-')
+
+
+class Profile(models.Model):
+    user = models.OneToOneField('auth.User',on_delete=models.CASCADE)
+    name = models.CharField(max_length=200,blank=True)
+    likes = models.ManyToManyField(Post, related_name="liker")
+    dislikes = models.ManyToManyField(Post, related_name="disliker")
+    score = models.IntegerField(default=20)
+
+    def like(self, post):  # return True if added to likes
+        if post in self.dislikes.all():
+            self.dislikes.remove(post)
+            post.plus()
+            return False
+        elif not post in self.likes.all():
+            self.likes.add(post)
+            post.plus()
+            return True
+
+    def dislike(self, post):
+        if post in self.likes.all():
+            self.likes.remove(post)
+            post.minus()
+            return False
+        elif not post in self.dislikes.all():
+            self.dislikes.add(post)
+            post.minus() 
+            return True   
+
+    def __str__(self):
+        return str(self.user.pk)+": "+self.name
+
+        
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+@receiver(post_save, sender = User)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance,name=instance.username)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.profile.save()

@@ -12,6 +12,7 @@
             success: function(data){
                 if(data.rate){
                     $('#rate').html(data.rate);
+                    renderState(data.rate_state);
                 }
             }
         });
@@ -25,6 +26,7 @@
             success: function(data){
                 if(data.rate){
                     $('#rate').html(data.rate);
+                    renderState(data.rate_state);
                 }
             }
         });
@@ -58,6 +60,23 @@
         });
         }
     });
+
+    function renderState(state){
+        if(state==-1){
+            $('button[name=minus]').addClass('btn-danger');
+            $('button[name=plus]').removeClass('btn-success');
+        }
+        if(state==0){
+            $('button[name=minus]').removeClass('btn-danger');
+            $('button[name=plus]').removeClass('btn-success');            
+        }
+        if(state==1){
+            $('button[name=minus]').removeClass('btn-danger');
+            $('button[name=plus]').addClass('btn-success');            
+        }
+    }
+
+
     function commentRender(data,text){
     var text = $('textarea[name=text]').val();
     $('textarea[name=text]').val('');
@@ -111,7 +130,7 @@
             </span>
             </a>
 
-        {% endif %}
+            {% endif %}
             <span class="date"> {{ post.published_date|date:" j. n. Y" }}</span>
             {% if user.is_authenticated and user.is_staff or user.username == post.author.username %}
                 <a href="{% url 'post_edit' pk=post.pk %}"><span class="glyphicon glyphicon-pencil"></span></a>
@@ -123,13 +142,13 @@
 
         <div class="input-group col-md-1">
               <div class="input-group-btn">
-              <button class="btn btn-default" name="minus">-</button>
+              <button class="btn btn-default {% if post in user.profile.dislikes.all %} btn-danger {% endif %}" name="minus">-</button>
                 <!-- Button and dropdown menu -->
               </div>
               <span id="rate" type="text" class="form-control">{{ post.rate }}</span>
               <div class="input-group-btn">
                 <!-- Button and dropdown menu -->
-                <button class="btn btn-default"  name="plus">+</button>
+                <button class="btn btn-default {% if post in user.profile.likes.all %} btn-success {% endif %}"  name="plus">+</button>
               </div>
         </div>
         {% else %}
