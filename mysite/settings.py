@@ -25,7 +25,7 @@ SECRET_KEY = '0(zrru$05+evl7!0c6@dl1nzfn-g*b*eb3ejbparje-d6il8w@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["mogaiskii.pythonanywhere.com", "localhost","127.0.0.1","0.0.0.0"]
+ALLOWED_HOSTS = ["mogaiskii.pythonanywhere.com", "localhost","127.0.0.1","0.0.0.0","blog.mogaiskii.ru"]
 
 
 # Application definition
@@ -76,10 +76,12 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'OPTIONS': {
-            'read_default_file': os.path.join(BASE_DIR,'mysite','db.cnf'),
-        },
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'blog',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+        'USER': 'django',
+        'PASSWORD': 'v8bt\\M{[E?nM#@Lz'
     }
 }
 
